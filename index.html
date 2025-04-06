@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mt-5 pt-3">
+    <div class="card shadow-sm mb-4 animate__animated animate__fadeIn">
+        <div class="card-body p-4">
+            <form id="job-search-form" class="mb-3">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" id="search-query" class="form-control" placeholder="Job title or keyword">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            <input type="text" id="location" class="form-control" placeholder="Location">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <select id="experience-level" class="form-select">
+                            <option value="">Any Experience Level</option>
+                            <option value="Entry Level">Entry Level</option>
+                            <option value="Mid-Senior">Mid-Senior Level</option>
+                            <option value="Director">Director</option>
+                            <option value="Executive">Executive</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="work-type" class="form-select">
+                            <option value="">Any Work Type</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Remote">Remote</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary px-4 py-2">
+                    <span id="search-button-text">Search Jobs</span>
+                    <span id="search-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="text-center my-5 d-none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Searching for jobs...</p>
+    </div>
+
+    <!-- No results message -->
+    <div id="no-results" class="card shadow-sm text-center p-5 d-none">
+        <h3 class="text-muted mb-3">No jobs found</h3>
+        <p class="text-muted">Try adjusting your search criteria or search for a different job title.</p>
+    </div>
+
+    <!-- Results container -->
+    <div id="results-container" class="d-none">
+        <div class="row" id="job-cards-container">
+            <!-- Job cards will be inserted here -->
+        </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Job search results pagination" class="my-4">
+            <ul class="pagination justify-content-center" id="pagination-container">
+                <!-- Pagination will be dynamically generated -->
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Job search functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('job-search-form');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const resultsContainer = document.getElementById('results-container');
+        const jobCardsContainer = document.getElementById('job-cards-container');
+        const noResults = document.getElementById('no-results');
+        const paginationContainer = document.getElementById('pagination-container');
+        const searchButton = document.getElementById('search-button-text');
+        const searchSpinner = document.getElementById('search-spinner');
+        
+        let jobs = [];
+        let currentPage = 1;
+        const jobsPerPage = 9;
+        
+        // Add subtle background animation
+        document.body.classList.add('animated-bg');
+
+        // Add animation on page load
+        animateCards();
+        
+        function animateCards() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            searchJobs();
+        });
+
+        function searchJobs() {
+            // Get form values
+            const query = document.getElementById('search-query').value;
+            const location = document.getElementById('location').value;
+            const experienceLevel = document.getElementById('experience-level').value;
+            const workType = document.getElementById('work-type').value;
+            
+            // Show loading state
+            searchButton.textContent = 'Searching...';
+            searchSpinner.classList.remove('d-none');
+            loadingIndicator.classList.remove('d-none');
+            resultsContainer.classList.add('d-none');
+            noResults.classList.add('d-none');
+            
+            // Build query URL
+            const params = new URLSearchParams();
+            if (query) params.append('query', query);
+            if (location) params.append('location', location);
+            if (experienceLevel) params.append('experienceLevel', experienceLevel);
+            if (workType) params.append('workType', workType);
+            
+            // Add timestamp to prevent caching
+            params.append('_t', Date.now().toString());
+            
+            // Fetch jobs from API
+            fetch(`/api/jobs?${params.toString()}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch jobs');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    jobs = data;
+                    currentPage = 1;
+                    
+                    if (jobs.length === 0) {
+                        // Show no results message
+                        noResults.classList.remove('d-none');
+                    } else {
+                        // Show results
+                        displayJobs();
+                        resultsContainer.classList.remove('d-none');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error searching for jobs:', error);
+                    alert('Failed to search for jobs. Please try again later.');
+                })
+                .finally(() => {
+                    // Hide loading state
+                    loadingIndicator.classList.add('d-none');
+                    searchButton.textContent = 'Search Jobs';
+                    searchSpinner.classList.add('d-none');
+                });
+        }
+        
+        function displayJobs() {
+            // Calculate pagination
+            const totalPages = Math.ceil(jobs.length / jobsPerPage);
+            const startIndex = (currentPage - 1) * jobsPerPage;
+            const endIndex = Math.min(startIndex + jobsPerPage, jobs.length);
+            const currentJobs = jobs.slice(startIndex, endIndex);
+            
+            // Clear previous job cards
+            jobCardsContainer.innerHTML = '';
+            
+            // Create job cards with staggered animation
+            currentJobs.forEach((job, index) => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'col-md-6 col-lg-4 mb-4';
+                jobCard.style.opacity = '0';
+                jobCard.style.transform = 'translateY(20px)';
+                jobCard.style.transition = 'all 0.3s ease';
+                jobCard.style.transitionDelay = `${index * 0.1}s`;
+                
+                // Get company logo based on company name or use default
+                const companyName = job.company.toLowerCase().trim();
+                let companyNameForLogo = companyName.split(' ')[0]; // Get first word
+                
+                // Special handling for multi-word company names
+                if (companyName.includes('tp-link')) {
+                    companyNameForLogo = 'tp-link';
+                } else if (companyName.includes('tie talent')) {
+                    companyNameForLogo = 'tietalent';
+                } else if (companyName.includes('techolution')) {
+                    companyNameForLogo = 'techolution';
+                } else if (companyName.includes('intellisoft')) {
+                    companyNameForLogo = 'intellisoft';
+                } else if (companyName.includes('pacific')) {
+                    companyNameForLogo = 'pacific';
+                } else if (companyName.includes('codeium')) {
+                    companyNameForLogo = 'codeium';
+                } else if (companyName.includes('stitch')) {
+                    companyNameForLogo = 'stitch';
+                } else if (companyName.includes('oxman')) {
+                    companyNameForLogo = 'oxman';
+                } else if (companyName.includes('tiktok')) {
+                    companyNameForLogo = 'tiktok';
+                } else if (companyName.includes('wp center')) {
+                    companyNameForLogo = 'wpcenter';
+                } else if (companyName.includes('talent')) {
+                    companyNameForLogo = 'talent';
+                } else if (companyName.includes('infosys')) {
+                    companyNameForLogo = 'infosys';
+                } else if (companyName.includes('oracle')) {
+                    companyNameForLogo = 'oracle';
+                } else if (companyName.includes('zus')) {
+                    companyNameForLogo = 'zus';
+                }
+                
+                const logoPath = `/static/img/companies/${companyNameForLogo}.png`;
+                const defaultLogo = '/static/img/companies/default.png';
+                
+                jobCard.innerHTML = `
+                    <div class="card h-100 shadow-sm hover-shadow">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="flex-grow-1 pe-3">
+                                    <h5 class="card-title text-primary mb-3">${job.title}</h5>
+                                    <div class="mb-2 d-flex align-items-center">
+                                        <div class="company-logo-container me-2">
+                                            <img 
+                                                src="${logoPath}" 
+                                                class="company-logo" 
+                                                alt="${job.company} Logo"
+                                                onerror="this.onerror=null; this.src='${defaultLogo}'"
+                                            >
+                                        </div>
+                                        <span class="fw-medium">${job.company}</span>
+                                    </div>
+                                    <p class="card-text text-muted mb-2">
+                                        <i class="bi bi-geo-alt"></i> ${job.location}
+                                    </p>
+                                    ${job.experienceLevel ? `<p class="card-text text-muted small mb-1">
+                                        <i class="bi bi-briefcase"></i> Experience: ${job.experienceLevel}
+                                    </p>` : ''}
+                                    ${job.workType ? `<p class="card-text text-muted small mb-0">
+                                        <i class="bi bi-clock"></i> Work Type: ${job.workType}
+                                    </p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-top-0 pt-0">
+                            <a href="https://www.linkedin.com/jobs/view/${job.id}" target="_blank" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-box-arrow-up-right me-1"></i>View Details
+                            </a>
+                        </div>
+                    </div>
+                `;
+                jobCardsContainer.appendChild(jobCard);
+                
+                // Trigger animation after a small delay
+                setTimeout(() => {
+                    jobCard.style.opacity = '1';
+                    jobCard.style.transform = 'translateY(0)';
+                }, 10);
+            });
+            
+            // Create pagination
+            renderPagination(totalPages);
+        }
+        
+        function renderPagination(totalPages) {
+            paginationContainer.innerHTML = '';
+            
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            `;
+            prevLi.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayJobs();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            paginationContainer.appendChild(prevLi);
+            
+            // Page numbers
+            const maxPages = Math.min(totalPages, 5);
+            let startPage = 1;
+            
+            if (totalPages > 5 && currentPage > 3) {
+                startPage = currentPage - 2;
+                if (startPage + 4 > totalPages) {
+                    startPage = totalPages - 4;
+                }
+            }
+            
+            for (let i = 0; i < maxPages; i++) {
+                const pageNum = startPage + i;
+                if (pageNum <= totalPages) {
+                    const pageLi = document.createElement('li');
+                    pageLi.className = `page-item ${pageNum === currentPage ? 'active' : ''}`;
+                    pageLi.innerHTML = `<a class="page-link" href="#">${pageNum}</a>`;
+                    pageLi.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        currentPage = pageNum;
+                        displayJobs();
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    });
+                    paginationContainer.appendChild(pageLi);
+                }
+            }
+            
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            `;
+            nextLi.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayJobs();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            paginationContainer.appendChild(nextLi);
+        }
+    });
+</script>
+{% endblock %}

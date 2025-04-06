@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title %}Top Companies | Actionable Jobs{% endblock %}
+
+{% block content %}
+<div class="mt-4 pt-3">
+    <div class="page-header text-center p-4 mb-5">
+        <h1 class="display-5 fw-bold mb-3">Discover Top Companies</h1>
+        <p class="lead text-muted mb-4">Find the perfect workplace with our curated list of top employers</p>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form id="company-search-form" class="d-flex">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" id="company-query" class="form-control" placeholder="Search companies by name or industry">
+                        <button type="submit" class="btn btn-primary px-4">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Companies section -->
+    <div class="container mb-5">
+        <h2 class="h4 mb-4">Featured Companies</h2>
+        <div class="row">
+            <!-- Featured company cards -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card company-card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/60" class="company-logo me-3" alt="Google Logo">
+                            <div>
+                                <h3 class="h5 mb-1">Google</h3>
+                                <p class="text-muted mb-0">Technology</p>
+                            </div>
+                        </div>
+                        <p class="card-text">A global leader in technology, cloud computing, and digital services with a mission to organize the world's information.</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <span class="badge badge-primary me-2">4.7 ★</span>
+                            <span class="text-muted small">342,000+ employees</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#" class="btn btn-outline-primary">View Profile</a>
+                            <span class="text-muted small">128 open jobs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card company-card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/60" class="company-logo me-3" alt="Microsoft Logo">
+                            <div>
+                                <h3 class="h5 mb-1">Microsoft</h3>
+                                <p class="text-muted mb-0">Technology</p>
+                            </div>
+                        </div>
+                        <p class="card-text">A multinational technology company that develops and supports software, services, and devices with a mission to empower every person and organization.</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <span class="badge badge-primary me-2">4.5 ★</span>
+                            <span class="text-muted small">181,000+ employees</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#" class="btn btn-outline-primary">View Profile</a>
+                            <span class="text-muted small">86 open jobs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card company-card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/60" class="company-logo me-3" alt="Amazon Logo">
+                            <div>
+                                <h3 class="h5 mb-1">Amazon</h3>
+                                <p class="text-muted mb-0">E-commerce & Tech</p>
+                            </div>
+                        </div>
+                        <p class="card-text">A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <span class="badge badge-primary me-2">4.2 ★</span>
+                            <span class="text-muted small">1.5M+ employees</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#" class="btn btn-outline-primary">View Profile</a>
+                            <span class="text-muted small">215 open jobs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Companies by Industry section -->
+    <div class="container mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h4 mb-0">Browse by Industry</h2>
+            <a href="#" class="text-decoration-none">View all <i class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-cpu text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Technology</h3>
+                    <p class="small text-muted mb-0">1,245 companies</p>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-bank text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Finance</h3>
+                    <p class="small text-muted mb-0">857 companies</p>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-hospital text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Healthcare</h3>
+                    <p class="small text-muted mb-0">632 companies</p>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-shop text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Retail</h3>
+                    <p class="small text-muted mb-0">489 companies</p>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-building text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Real Estate</h3>
+                    <p class="small text-muted mb-0">356 companies</p>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-truck text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Logistics</h3>
+                    <p class="small text-muted mb-0">278 companies</p>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-easel text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Education</h3>
+                    <p class="small text-muted mb-0">412 companies</p>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm text-center p-3 hover-shadow h-100">
+                    <div class="py-3">
+                        <i class="bi bi-globe text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 class="h6 mb-2">Media</h3>
+                    <p class="small text-muted mb-0">293 companies</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Rated Companies section -->
+    <div class="container mb-5">
+        <h2 class="h4 mb-4">Top Rated Companies</h2>
+        
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Company</th>
+                        <th scope="col">Industry</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col">Employees</th>
+                        <th scope="col">Jobs</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://via.placeholder.com/40" class="me-3 rounded" alt="Company Logo">
+                                <div>
+                                    <h6 class="mb-0">Salesforce</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>CRM & Cloud Computing</td>
+                        <td><span class="text-warning">4.8 ★</span></td>
+                        <td>73,000+</td>
+                        <td>64 open jobs</td>
+                        <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://via.placeholder.com/40" class="me-3 rounded" alt="Company Logo">
+                                <div>
+                                    <h6 class="mb-0">Apple</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>Technology</td>
+                        <td><span class="text-warning">4.7 ★</span></td>
+                        <td>154,000+</td>
+                        <td>92 open jobs</td>
+                        <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://via.placeholder.com/40" class="me-3 rounded" alt="Company Logo">
+                                <div>
+                                    <h6 class="mb-0">HubSpot</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>Marketing Software</td>
+                        <td><span class="text-warning">4.7 ★</span></td>
+                        <td>7,400+</td>
+                        <td>38 open jobs</td>
+                        <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://via.placeholder.com/40" class="me-3 rounded" alt="Company Logo">
+                                <div>
+                                    <h6 class="mb-0">Nvidia</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>AI & Computing</td>
+                        <td><span class="text-warning">4.6 ★</span></td>
+                        <td>26,200+</td>
+                        <td>127 open jobs</td>
+                        <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://via.placeholder.com/40" class="me-3 rounded" alt="Company Logo">
+                                <div>
+                                    <h6 class="mb-0">LinkedIn</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>Professional Network</td>
+                        <td><span class="text-warning">4.5 ★</span></td>
+                        <td>20,500+</td>
+                        <td>56 open jobs</td>
+                        <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation for cards
+        const allCards = document.querySelectorAll('.card');
+        allCards.forEach((card, index) => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.4s ease';
+                card.style.opacity = 1;
+                card.style.transform = 'translateY(0)';
+            }, 70 * index);
+        });
+        
+        // Company search form handling
+        document.getElementById('company-search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = document.getElementById('company-query').value;
+            if (query) {
+                alert(`You searched for: "${query}". This would trigger a real company search in a full implementation.`);
+            }
+        });
+        
+        // Table row hover animation
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+                this.style.backgroundColor = '#f8f9fa';
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+                this.style.transform = '';
+                this.style.boxShadow = '';
+            });
+        });
+    });
+</script>
+{% endblock %}
